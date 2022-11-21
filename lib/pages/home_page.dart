@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                   Text('Ciudad: XXXXXXXX\nDepartamento: XXXXXXX\nTemperatura: XX'
                       '\n\nDescripción: Lorem Ipsum is simply dummy text of the'
                       ' printing and typesetting industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.\n\n'
-                      'Otra información de interés', style: TextStyle(fontSize: 20),)
+                      'Otra información de interés.', style: TextStyle(fontSize: 20),)
                 ],
               ),
             )
