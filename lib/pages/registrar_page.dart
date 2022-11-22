@@ -1,7 +1,7 @@
 import 'package:proyecto_final/pages/login_page.dart';
+import 'package:proyecto_final/repositorio/usuarioregistrar.dart';
 import 'package:flutter/material.dart';
 
-enum Genero{Femenino, Masculino}
 
 class RegistrarPage extends StatefulWidget {
   const RegistrarPage({Key? key}) : super(key: key);
@@ -14,10 +14,11 @@ class _RegistrarPageState extends State<RegistrarPage> {
   final email = TextEditingController();
   final password = TextEditingController();
   final confpassword = TextEditingController();
+  Usuario_registrar usuario = Usuario_registrar();
 
-  Genero? genero = Genero.Masculino;
 
   void guardarUsuario() async{
+    bool resultado = await usuario.registrarUsuario(email.text, password.text);
     Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginPage()));
   }
 

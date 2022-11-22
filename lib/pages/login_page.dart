@@ -2,6 +2,7 @@
 import 'package:proyecto_final/pages/home_page.dart';
 import 'package:proyecto_final/pages/registrar_page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 //Escribir stful para crear la clase
 class LoginPage extends StatefulWidget {
@@ -15,10 +16,18 @@ class _LoginPageState extends State<LoginPage> {
 
   final email=TextEditingController();
   final password=TextEditingController();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   void validarUsuario() async {
     try {
-      if (email.text == 'santiagovelas119@gmail.com') {
+      if (email.text.isNotEmpty && password.text.isNotEmpty) {
+        final user = await auth.signInWithEmailAndPassword(email: email.text, password: password.text);
+        if(user != null){
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const HomePage()));
+        }
+
+        /*if (email.text == 'santiagovelas119@gmail.com') {
           if (password.text == '123456') {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
           }else{
@@ -26,7 +35,10 @@ class _LoginPageState extends State<LoginPage> {
           }
         } else{
           mostrarMensaje('Usuario no registrado');
-        }
+        }*/
+      }else{
+        mostrarMensaje('Por favor ingrese todos los datos');
+      }
     }catch (e) {
       mostrarMensaje('Acceso denegado: '+e.toString());
     }
