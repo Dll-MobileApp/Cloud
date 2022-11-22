@@ -1,3 +1,4 @@
+import 'package:proyecto_final/modelo/usuario_modelo.dart';
 import 'package:proyecto_final/pages/login_page.dart';
 import 'package:proyecto_final/repositorio/usuarioregistrar.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +16,53 @@ class _RegistrarPageState extends State<RegistrarPage> {
   final password = TextEditingController();
   final confpassword = TextEditingController();
   Usuario_registrar usuario = Usuario_registrar();
+  late mensaje msg;
 
 
-  void guardarUsuario() async{
-    bool resultado = await usuario.registrarUsuario(email.text, password.text);
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginPage()));
+  void guardarUsuario(Usuario usuNew) async{
+    var resultado = await usuario.registrarUsuario(email.text, password.text);
+    usuNew.id = resultado;
+    if(resultado =='invalid-email'){
+      msg.mostrarMensaje('El formato del E-mail no es correcto');
+    }
+    if(resultado =='weak-password'){
+      msg.mostrarMensaje('La contraseña debe tener mas de 6 caracteres');
+    }
+    if(resultado =='unknown'){
+      msg.mostrarMensaje('Por favor llene todo los datos');
+    }
+    if(resultado =='network-request-failed'){
+      msg.mostrarMensaje('Sin conexión a internet');
+    }else{
+      usuNew.id = resultado;
+      registrarUsuario(usuNew);
+      msg.MensajeOK('Usuario registrado con éxito.');
+    }
+  }
+
+  void registrarUsuario(Usuario usuNew) async{
+    var id= await usuario.crearUsuario(usuNew);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const LoginPage()));
+  }
+
+  void traerDatos(){
+    setState(() {
+      if(password.text == confpassword.text){
+        if(email.text.isNotEmpty && password.text.isNotEmpty && confpassword.text.isNotEmpty){
+          var usuNew = Usuario('', email.text, password.text);
+          guardarUsuario(usuNew);
+        }else{
+          msg.mostrarMensaje('Por favor llene todos los datos');
+        }
+      }else{
+        msg.mostrarMensaje('Las contraseñas no coinciden.');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
+    msg = mensaje(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -99,7 +137,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
                   const SizedBox(
                     height: 30,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 130,
                   ),
                   ElevatedButton(
@@ -112,11 +150,11 @@ class _RegistrarPageState extends State<RegistrarPage> {
                           textStyle: const TextStyle(
                               fontStyle: FontStyle.italic, fontSize: 20)),
                       onPressed: (){
-                        guardarUsuario();
+                        traerDatos();
                       },
                       child: const Text('Registrarse')
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                 ],
