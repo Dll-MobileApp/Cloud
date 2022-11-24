@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:proyecto_final/modelo/lugares_local.dart';
+
+import '../repositorio/boxes.dart';
 
 class DetallesPage extends StatefulWidget {
   const DetallesPage({Key? key}) : super(key: key);
@@ -8,11 +12,26 @@ class DetallesPage extends StatefulWidget {
 }
 
 class _DetallesPageState extends State<DetallesPage> {
+
+  void agregarFavoritos(){
+    var lugarFavorito = LugaresLocal();
+    final box = Boxes.boxFavoritos();
+    box.add(lugarFavorito);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalle sitio turístico POI'),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.only(right: 35),
+              onPressed: (){
+              agregarFavoritos();
+              },
+              icon: const Icon(FontAwesomeIcons.heart, color: Colors.red,))
+        ],
       ),
       body: Center(
         child: Column(
@@ -23,7 +42,7 @@ class _DetallesPageState extends State<DetallesPage> {
               margin: EdgeInsets.all(30),
             ),
             Container(
-              child: const Image(image: AssetImage('assets/Logo.png'), width: 120, height: 120,),
+              child: const Image(image: AssetImage('assets/playa.png'), width: 120, height: 120,),
             ),
             const SizedBox(
               height: 20,
